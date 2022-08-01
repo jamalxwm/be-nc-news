@@ -17,7 +17,19 @@
 `npm i `
 
 They should include: dotenv, express, postgres, supertest, jest, jest-sorted, jest-extended, husky and pg-format. They should be in the package.json like this:<br></p>
-<code>TBA</code>
+<code>"devDependencies": {
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "jest-extended": "^2.0.0",
+    "jest-sorted": "^1.0.14",
+    "pg-format": "^1.0.4",
+    "supertest": "^6.2.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "pg": "^8.7.3"
+  },</code>
 
 ### SETUP DATABASE 📂
 
