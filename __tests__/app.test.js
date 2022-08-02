@@ -27,3 +27,14 @@ describe('1. GET /api/topics', () => {
       });
   });
 });
+
+describe('Error Handling', () => {
+  test('Status: 400 // Returns bad request for invalid URLs', () => {
+    return request(app)
+      .get('/invalid')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+});
