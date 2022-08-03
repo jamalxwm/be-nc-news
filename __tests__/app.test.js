@@ -3,6 +3,7 @@ const app = require('../app');
 const db = require('../db/connection');
 const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data/index.js');
+require('jest-sorted');
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -83,7 +84,7 @@ describe('2. GET - /api/articles/:article_id', () => {
             body: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
-            comment_count: expect.any(Number)
+            comment_count: expect.any(Number),
           })
         );
       });
@@ -153,6 +154,46 @@ describe('4. GET - /api/users', () => {
             })
           );
         });
+      });
+  });
+});
+
+describe('5. GET - /api/articles', () => {
+  test('Status: 200 // Returns array of article objects', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body;
+        expect(articles).toBeInstanceOf(Array);
+      });
+  });
+  test('Status: 200 // Article objects contain props for author, title, topic, article_id, created_at, votes, and comment_count', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body;
+        articles.forEach((article) =>
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            article_id: expect.any(Number),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          })
+        );
+      });
+  });
+  test('Status: 200 // Objects are sorted by created_at descending', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body;
+        expect(articles).toBeSortedBy('created_at', { descending: true });
       });
   });
 });
