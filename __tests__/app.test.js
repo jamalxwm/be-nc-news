@@ -99,26 +99,37 @@ describe('3. PATCH - /api/articles/:article_id', () => {
   test('Status 400 // Returns "Bad request" on inavlid ID', () => {
     return request(app)
       .patch('/api/articles/banana')
-      .send({ add_votes: 3 })
+      .send({ inc_votes: 3 })
       .expect(400)
       .then(({ body }) => expect(body.msg).toBe('Bad request'));
   });
   test('Status: 404 // Returns "Not found" on valid non-existent article ID', () => {
     return request(app)
       .patch('/api/articles/5000')
-      .send({ add_votes: 3 })
+      .send({ inc_votes: 3 })
       .expect(404)
       .then(({ body }) => expect(body.msg).toBe('Article not found'));
   });
-  test.only('Status: 200 // Updates votes on valid articles', () => {
+  test('Status: 200 // Increments votes on valid article IDs', () => {
     return request(app)
       .patch('/api/articles/5')
-      .send({ add_votes: 3 })
+      .send({ inc_votes: 3 })
       .expect(200)
       .then(({ body }) => {
         const article = body;
         expect(article[0].article_id).toBe(5);
         expect(article[0].votes).toBe(3);
+      });
+  });
+  test('Status: 200 // Decrements votes on valid article IDs', () => {
+    return request(app)
+      .patch('/api/articles/6')
+      .send({ inc_votes: -3 })
+      .expect(200)
+      .then(({ body }) => {
+        const article = body;
+        expect(article[0].article_id).toBe(6);
+        expect(article[0].votes).toBe(-3);
       });
   });
 });
