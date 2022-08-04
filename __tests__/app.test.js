@@ -140,3 +140,25 @@ describe('3. PATCH - /api/articles/:article_id', () => {
       });
   });
 });
+
+describe('4. GET - /api/users', () => {
+  test('Status: 200 // Returns an array of user objects containing a name, username, and avatar_url', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+        expect(users).toHaveLength(4);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
