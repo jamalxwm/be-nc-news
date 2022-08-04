@@ -20,7 +20,7 @@ describe('App', () => {
   });
 });
 
-describe('1. GET /api/topics', () => {
+describe('1. GET - /api/topics', () => {
   test('Status: 200 // Returns an array of topic objects containing a slug and description', () => {
     return request(app)
       .get('/api/topics')
@@ -41,7 +41,7 @@ describe('1. GET /api/topics', () => {
   });
 });
 
-describe('2. GET /api/articles/:article_id', () => {
+describe('2. GET - /api/articles/:article_id', () => {
   test('Status: 404 // Returns "not found" for valid non-existent IDs', () => {
     return request(app)
       .get('/api/articles/1233')
@@ -85,6 +85,58 @@ describe('2. GET /api/articles/:article_id', () => {
             votes: expect.any(Number),
           })
         );
+      });
+  });
+});
+
+describe('3. PATCH - /api/articles/:article_id', () => {
+  test('Status: 400 // Returns "Bad request" when votes are not provided', () => {
+    return request(app)
+      .patch('/api/articles/4')
+      .expect(400)
+      .then(({ body }) => expect(body.msg).toBe('No votes submitted'));
+  });
+  test('Status 400 // Returns "Bad request" on inavlid ID', () => {
+    return request(app)
+      .patch('/api/articles/banana')
+      .send({ inc_votes: 3 })
+      .expect(400)
+      .then(({ body }) => expect(body.msg).toBe('Bad request'));
+  });
+  test('Status: 404 // Returns "Not found" on valid non-existent article ID', () => {
+    return request(app)
+      .patch('/api/articles/5000')
+      .send({ inc_votes: 3 })
+      .expect(404)
+      .then(({ body }) => expect(body.msg).toBe('Article not found'));
+  });
+  test('Status: 400 // Returns bad request for invalid syntax', () => {
+    return request(app)
+      .patch('/api/articles/5')
+      .send({ inc_votes: 'three' })
+      .expect(400)
+      .then(({ body }) => expect(body.msg).toBe('Bad request'));
+  });
+  test('Status: 200 // Increments votes on valid article IDs', () => {
+    return request(app)
+      .patch('/api/articles/5')
+      .send({ inc_votes: 3 })
+      .expect(200)
+      .then(({ body }) => {
+        const article = body;
+        expect(article[0].article_id).toBe(5);
+        expect(article[0].votes).toBe(3);
+      });
+  });
+  test('Status: 200 // Decrements votes on valid article IDs', () => {
+    return request(app)
+      .patch('/api/articles/6')
+      .send({ inc_votes: -3 })
+      .expect(200)
+      .then(({ body }) => {
+        const article = body;
+        expect(article[0].article_id).toBe(6);
+        expect(article[0].votes).toBe(-3);
       });
   });
 });
