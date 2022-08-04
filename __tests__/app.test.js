@@ -181,6 +181,7 @@ describe('5. GET - /api/articles', () => {
       .expect(200)
       .then(({ body }) => {
         const articles = body;
+        expect(articles.length).toBeGreaterThan(0);
         articles.forEach((article) =>
           expect(article).toMatchObject({
             author: expect.any(String),
