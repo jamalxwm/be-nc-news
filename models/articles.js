@@ -60,7 +60,6 @@ exports.updateVotesOnArticleByID = (id, vote) => {
 };
 
 exports.fetchArticleComments = async (id) => {
-  try {
     const article = await this.fetchArticleByID(id);
     if (article.status === 404) return Promise.reject(article);
     const { rows } = await db.query(
@@ -68,7 +67,6 @@ exports.fetchArticleComments = async (id) => {
       [id]
     );
     return rows;
-  } catch (err) {
-    return Promise.reject(err);
-  }
 };
+
+

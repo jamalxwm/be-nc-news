@@ -224,7 +224,7 @@ describe('6. GET - /api/articles/:article_id/comments', () => {
       .get('/api/articles/1/comments')
       .expect(200)
       .then(({ body }) => {
-        const comments = body;
+        const { comments } = body;
         expect(comments).toBeInstanceOf(Array);
       });
   });
@@ -233,7 +233,7 @@ describe('6. GET - /api/articles/:article_id/comments', () => {
       .get('/api/articles/2/comments')
       .expect(200)
       .then(({ body }) => {
-        const comments = body;
+        const { comments } = body;
         expect(comments).toBeInstanceOf(Array);
         expect(comments.length).toBe(0);
       });
@@ -243,10 +243,11 @@ describe('6. GET - /api/articles/:article_id/comments', () => {
       .get('/api/articles/1/comments')
       .expect(200)
       .then(({ body }) => {
-        const comments = body;
+        const { comments } = body;
         expect(comments.length).toBeGreaterThan(0);
         comments.forEach((comment) => {
           expect(comment).toMatchObject({
+            article_id: expect.any(Number),
             comment_id: expect.any(Number),
             votes: expect.any(Number),
             created_at: expect.any(String),
