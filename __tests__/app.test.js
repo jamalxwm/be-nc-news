@@ -205,3 +205,55 @@ describe('5. GET - /api/articles', () => {
       });
   });
 });
+
+describe('6. GET - /api/articles/:article_id/comments', () => {
+  test('Status: 404 // Returns "Not found" for valid non-existent article_ID', () => {
+    return request(app)
+      .get('/api/articles/5000/comments')
+      .expect(404)
+      .then(({ body }) => expect(body.msg).toBe('Article not found'));
+  });
+  test('Status: 400 // Returns "Bad request" for invalid article_id', () => {
+    return request(app)
+      .get('/api/articles/coconuts/comments')
+      .expect(400)
+      .then(({ body }) => expect(body.msg).toBe('Bad request'));
+  });
+  test('Status: 200 // Returns an array of objects', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body;
+        expect(comments).toBeInstanceOf(Array);
+      });
+  });
+  test('Status: 200 // Returns an empty array for articles without comments', () => {
+    return request(app)
+      .get('/api/articles/2/comments')
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body;
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments.length).toBe(0);
+      });
+  });
+  test('Status: 200 // Comment objects include props for comment_id, votes, created_at, author, and body', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body;
+        expect(comments.length).toBeGreaterThan(0);
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+      });
+  });
+});
