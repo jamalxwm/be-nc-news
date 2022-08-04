@@ -112,6 +112,13 @@ describe('3. PATCH - /api/articles/:article_id', () => {
       .expect(404)
       .then(({ body }) => expect(body.msg).toBe('Article not found'));
   });
+  test('Status: 400 // Returns bad request for invalid syntax', () => {
+    return request(app)
+      .patch('/api/articles/5')
+      .send({ inc_votes: 'three' })
+      .expect(400)
+      .then(({ body }) => expect(body.msg).toBe('Bad request'));
+  });
   test('Status: 200 // Increments votes on valid article IDs', () => {
     return request(app)
       .patch('/api/articles/5')

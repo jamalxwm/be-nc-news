@@ -50,7 +50,7 @@ exports.updateVotesOnArticleByID = (id, vote) => {
           return Promise.reject({ status: 404, msg: 'Article not found' });
         }
         return article.rows;
-      });
+      })
   }
   return Promise.reject({
     status: 400,
