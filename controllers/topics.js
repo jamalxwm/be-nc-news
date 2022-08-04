@@ -9,4 +9,3 @@ exports.getTopics = (req, res) => {
       console.log(err);
     });
 };
-

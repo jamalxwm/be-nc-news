@@ -35,7 +35,7 @@ exports.fetchArticleByID = (id) => {
       if (article.rows.length < 1) {
         return Promise.reject({ status: 404, msg: 'Article not found' });
       }
-      return { article: article.rows };
+      return article.rows;
     });
 };
 
@@ -60,13 +60,11 @@ exports.updateVotesOnArticleByID = (id, vote) => {
 };
 
 exports.fetchArticleComments = async (id) => {
-    const article = await this.fetchArticleByID(id);
-    if (article.status === 404) return Promise.reject(article);
-    const { rows } = await db.query(
-      `SELECT * FROM comments WHERE article_id = $1;`,
-      [id]
-    );
-    return rows;
+  const article = await this.fetchArticleByID(id);
+  if (article.status === 404) return Promise.reject(article);
+  const { rows } = await db.query(
+    `SELECT * FROM comments WHERE article_id = $1;`,
+    [id]
+  );
+  return rows;
 };
-
-

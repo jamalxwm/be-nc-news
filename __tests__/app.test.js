@@ -125,7 +125,7 @@ describe('3. PATCH - /api/articles/:article_id', () => {
       .send({ inc_votes: 3 })
       .expect(200)
       .then(({ body }) => {
-        const article = body;
+        const { article } = body;
         expect(article[0].article_id).toBe(5);
         expect(article[0].votes).toBe(3);
       });
@@ -136,7 +136,7 @@ describe('3. PATCH - /api/articles/:article_id', () => {
       .send({ inc_votes: -3 })
       .expect(200)
       .then(({ body }) => {
-        const article = body;
+        const { article } = body;
         expect(article[0].article_id).toBe(6);
         expect(article[0].votes).toBe(-3);
       });
@@ -171,7 +171,7 @@ describe('5. GET - /api/articles', () => {
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
-        const articles = body;
+        const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
       });
   });
@@ -180,7 +180,7 @@ describe('5. GET - /api/articles', () => {
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
-        const articles = body;
+        const { articles } = body;
         expect(articles.length).toBeGreaterThan(0);
         articles.forEach((article) =>
           expect(article).toMatchObject({
@@ -200,7 +200,7 @@ describe('5. GET - /api/articles', () => {
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
-        const articles = body;
+        const { articles } = body;
         expect(articles).toBeSortedBy('created_at', { descending: true });
       });
   });
