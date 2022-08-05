@@ -12,7 +12,6 @@ const {
 
 const errors = require('./errors');
 
-
 app.use(express.json());
 
 app.get('/api/topics', getTopics);
@@ -23,6 +22,7 @@ app.get('/api/articles/:article_id', getArticlesByID);
 app.patch('/api/articles/:article_id', patchArticleByID);
 
 app.get('/api/articles/:article_id/comments', getArticleComments);
+app.post('/api/articles/:article_id/comments', postComment);
 
 app.get('/api/users', getUsers);
 

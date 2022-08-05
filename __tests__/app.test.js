@@ -258,3 +258,76 @@ describe('6. GET - /api/articles/:article_id/comments', () => {
       });
   });
 });
+
+describe('7. POST /api/articles/:article_id/comments', () => {
+  describe('Status: 400 // Bad requests:', () => {
+    test('Invalid article IDs', () => {
+      return request(app)
+        .post('/api/articles/coconuts/comments')
+        .send({ username: 'harrypotter', body: "I'm a wizard!" })
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Bad request'));
+    });
+    test('Empty username', () => {
+      return request(app)
+        .post('/api/articles/1/comments')
+        .send({ body: "I'm a wizard!" })
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Username is required'));
+    });
+    test('Empty body', () => {
+      return request(app)
+        .post('/api/articles/1/comments')
+        .send({ username: 'harrypotter' })
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Body is required'));
+    });
+    test('Empty body', () => {
+      return request(app)
+        .post('/api/articles/1/comments')
+        .send({})
+        .expect(400)
+        .then(({ body }) =>
+          expect(body.msg).toBe('Username and body are required')
+        );
+    });
+    test('Invalid username syntax', () => {
+      return request(app)
+        .post('/api/articles/1/comments')
+        .send({
+          username: 8675309,
+          body: "Hey, Jenny, don't change your number",
+        })
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Username must be a string'));
+    });
+  });
+  describe('Status: 404 // Not found:', () => {
+    test('Valid but non-existent article_id', () => {
+      return request(app)
+        .post('/api/articles/5000/comments')
+        .send({
+          username: 'JamesHetfield',
+          body: 'Nomad, vagabond, call me what you will',
+        })
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toBe('Article not found'));
+    });
+  });
+  describe('Status: 201 // Created', () => {
+    test('Responds with the posted comment', () => {
+      return request(app)
+        .post('/api/articles/2/comments')
+        .send({
+          username: 'lurker',
+          body: 'Im just lurking',
+        })
+        .expect(201)
+        .then(({ body }) => {
+          const { comment } = body;
+          const expected = 'Im just lurking';
+          expect(comment.body).toEqual(expected);
+        });
+    });
+  });
+});
