@@ -394,7 +394,7 @@ describe('8. GET - /api/articles?queries)', () => {
   });
 });
 
-describe.only('9. DELETE - /api/comments/:comment_id', () => {
+describe('9. DELETE - /api/comments/:comment_id', () => {
   describe('Status: 400 // Bad requests:', () => {
     test('Missing comment ID', () => {
       return request(app)
