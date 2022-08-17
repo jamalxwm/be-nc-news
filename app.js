@@ -9,6 +9,7 @@ const {
   getArticleComments,
   postComment,
 } = require('./controllers/articles');
+const endpoints = require('./endpoints.json');
 
 const errors = require('./errors');
 const { deleteComment } = require('./controllers/comments');
@@ -28,6 +29,8 @@ app.post('/api/articles/:article_id/comments', postComment);
 app.delete('/api/comments/:comment_id', deleteComment);
 
 app.get('/api/users', getUsers);
+
+app.get('/api', (req, res) => res.send(endpoints));
 
 app.use(errors);
 
