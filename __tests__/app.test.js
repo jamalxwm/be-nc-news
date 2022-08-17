@@ -393,3 +393,27 @@ describe('8. GET - /api/articles?queries)', () => {
     });
   });
 });
+
+describe('9. DELETE - /api/comments/:comment_id', () => {
+  describe('Status: 400 // Bad requests:', () => {
+    test('Missing comment ID', () => {
+      return request(app)
+        .delete('/api/comments/mangos')
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Invalid comment ID'));
+    });
+  });
+  describe('Status: 404 // Not found:', () => {
+    test('Valid non-existent comment IDs', () => {
+      return request(app)
+        .delete('/api/comments/50000')
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toBe('No comments found'));
+    });
+  });
+  describe('Status: 204 // Not content:', () => {
+    test('Valid non-existent comment IDs', () => {
+      return request(app).delete('/api/comments/3').expect(204);
+    });
+  });
+});
