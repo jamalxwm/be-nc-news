@@ -10,16 +10,96 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
+    "description": "serves an array of all articles",
     "queries": ["author", "topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
           "title": "Seafood substitutions are increasing",
           "topic": "cooking",
+          "article_id": 4,
           "author": "weegembump",
           "body": "Text from the article..",
-          "created_at": 1527695953341
+          "created_at": 1527695953341,
+          "votes": 7,
+          "comment_count": 5
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves a single user-specified article by article id",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+          "title": "Eight pug gifs that remind me of mitch",
+          "topic": "mitch",
+          "article_id": 6,
+          "author": "icellusedkars",
+          "body": "some gifs",
+          "created_at": 1604394720000,
+          "votes": 0,
+          "comment_count": 8
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "increments/decrements the votes on single user-specified article",
+    "queries": {  "inc_votes": 3  },
+    "exampleResponse": {
+      "article": [
+        { "votes": 3 }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array of comments of a single user-specified article",
+    "queries":[],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 5,
+          "body": "Fruit pastilles",
+          "votes": 0,
+          "author": "icellusedkars",
+          "article_id": 1,
+          "created_at": 1592220300000
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "serves all comments for a single user-specified article",
+    "queries":[],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 5,
+          "body": "Fruit pastilles",
+          "votes": 0,
+          "author": "icellusedkars",
+          "article_id": 1,
+          "created_at": 1592220300000
+        }
+      ]
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a single user-specified comments",
+    "queries":[],
+    "exampleResponse": []
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries":[],
+    "exampleResponse": {
+      "comments": [
+        {
+          "username": "lurker",
+          "name": "do_nothing",
+          "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
         }
       ]
     }

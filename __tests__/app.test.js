@@ -282,7 +282,7 @@ describe('7. POST /api/articles/:article_id/comments', () => {
         .expect(400)
         .then(({ body }) => expect(body.msg).toBe('Body is required'));
     });
-    test('Empty body', () => {
+    test('Empty input', () => {
       return request(app)
         .post('/api/articles/1/comments')
         .send({})
@@ -314,7 +314,7 @@ describe('7. POST /api/articles/:article_id/comments', () => {
         .then(({ body }) => expect(body.msg).toBe('Article not found'));
     });
   });
-  describe('Status: 201 // Created', () => {
+  describe('Status: 201 // Created:', () => {
     test('Responds with the posted comment', () => {
       return request(app)
         .post('/api/articles/2/comments')
@@ -328,6 +328,92 @@ describe('7. POST /api/articles/:article_id/comments', () => {
           const expected = 'Im just lurking';
           expect(comment.body).toEqual(expected);
         });
+    });
+  });
+});
+
+describe('8. GET - /api/articles?queries)', () => {
+  describe('Status: 400 // Bad requests:', () => {
+    test('Invalid sort query', () => {
+      return request(app)
+        .get('/api/articles?sort_by=asdkf')
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Invalid sort query'));
+    });
+    test('Invalid order query', () => {
+      return request(app)
+        .get('/api/articles?order=hjkl')
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Invalid order query'));
+    });
+    test('Invalid filter query', () => {
+      return request(app)
+        .get('/api/articles?topic=waffles')
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Invalid filter query'));
+    });
+  });
+  describe('Status: 200 // OK:', () => {
+    test('Returns articles sorted by date in descending by default', () => {
+      return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toBeSortedBy('created_at', { descending: true });
+        });
+    });
+    test('Returns user-defined sorted and ordered result', () => {
+      const sort_by = 'title';
+      const order = 'asc';
+      return request(app)
+        .get('/api/articles')
+        .query({ sort_by, order })
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toBeSortedBy('title');
+        });
+    });
+    test('Returns user-defined filter result', () => {
+      const topic = 'mitch';
+      return request(app)
+        .get('/api/articles')
+        .query({ topic })
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(11);
+          articles.forEach((article) => {
+            expect(article).toMatchObject({
+              topic: 'mitch',
+            });
+          });
+        });
+    });
+  });
+});
+
+describe('9. DELETE - /api/comments/:comment_id', () => {
+  describe('Status: 400 // Bad requests:', () => {
+    test('Missing comment ID', () => {
+      return request(app)
+        .delete('/api/comments/mangos')
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toBe('Invalid comment ID'));
+    });
+  });
+  describe('Status: 404 // Not found:', () => {
+    test('Valid non-existent comment IDs', () => {
+      return request(app)
+        .delete('/api/comments/50000')
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toBe('No comments found'));
+    });
+  });
+  describe('Status: 204 // Not content:', () => {
+    test('Valid non-existent comment IDs', () => {
+      return request(app).delete('/api/comments/3').expect(204);
     });
   });
 });
