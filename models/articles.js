@@ -76,7 +76,7 @@ exports.fetchArticleComments = async (id) => {
   if (article.status === 404) return Promise.reject(article);
 
   const { rows } = await db.query(
-    `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at;`,
+    `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`,
     [id]
   );
   return rows;
