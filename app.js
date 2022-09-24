@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const { getTopics } = require('./controllers/topics');
-const { getUsers } = require('./controllers/users');
+const { getUsers, getUser } = require('./controllers/users');
 const {
   getArticles,
   getArticlesByID,
@@ -31,6 +31,7 @@ app.post('/api/articles/:article_id/comments', postComment);
 app.delete('/api/comments/:comment_id', deleteComment);
 
 app.get('/api/users', getUsers);
+app.get('/api/users/:username', getUser)
 
 app.get('/api', (req, res) => res.send(endpoints));
 

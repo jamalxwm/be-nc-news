@@ -411,9 +411,33 @@ describe('9. DELETE - /api/comments/:comment_id', () => {
         .then(({ body }) => expect(body.msg).toBe('No comments found'));
     });
   });
-  describe('Status: 204 // Not content:', () => {
+  describe('Status: 204 // No content:', () => {
     test('Valid non-existent comment IDs', () => {
       return request(app).delete('/api/comments/3').expect(204);
+    });
+  });
+});
+
+describe('10. GET - /api/users/:username', () => {
+  describe('Status: 400 // Bad requests:', () => {
+    test('Valid non-existent username', () => {
+      return request(app)
+        .get('/api/users/mangos')
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toBe('No user found'));
+    });
+  });
+  describe('Status: 200 // OK:', () => {
+    test('Returns an object', () => {
+      return request(app)
+        .get('/api/users/butter_bridge')
+        .expect(200)
+        .then(({ body }) => {
+          const { user } = body;
+          expect(user).toHaveProperty('username');
+          expect(user).toHaveProperty('name');
+          expect(user).toHaveProperty('avatar_url');
+        });
     });
   });
 });

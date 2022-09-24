@@ -8,3 +8,14 @@ exports.fetchUsers = () => {
     return users.rows;
   });
 };
+
+exports.fetchUser = (username) => {
+  return db
+    .query(`SELECT * FROM users WHERE username = $1`, [username])
+    .then((user) => {
+      if (!user.rows.length) {
+        return Promise.reject({ status: 404, msg: 'No user found' });
+      }
+      return user.rows[0];
+    });
+};
