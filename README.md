@@ -1,58 +1,82 @@
-# <b>Jamals NC News </b> 📰
+# Papers (Backend)
+![Papers logo](./PaperLogoLight.png "Papers logo")
 
-<p>This is a working document. If you're reading this, you know why you're here 😀</p>
+**Papers** is a reddit-style web app allowing users to read, comment, and like articles contributed by other users as well as posting article themselves. 
 
-<p>Here's some instructions to get started, well clean the rest of this shizzle up later!</p>
+Hosted at:
+https://be-nc-news-jwm.herokuapp.com/api 🔗
 
----
+This repo handles Paper's backend codebase. You can see check out the frontend [repo here](https://github.com/jamalxwm/fe-nc-news).
 
-## 🔌 <b>JUMPSTART</b>
+## Project Summary 🗒
 
-<br></br>
+This project creates an API for programmatically accecessing and updating the application database. The API mimics a real-world backend service for providing data to a frontend architecture. 
 
-### DEPENDENCIES 🫴
+## Tech Stack 💾
 
-<p>To install the dependencies used you will need to use the prompt:
+- PostgreSQL (database)
+- Express.JS (server)
+- Node-postgres (cli)
 
-`npm i `
+## Getting Started
 
-They should include: dotenv, express, postgres, supertest, jest, jest-sorted, jest-extended, husky and pg-format. They should be in the package.json like this:<br></p>
-<code>"devDependencies": {
-    "husky": "^7.0.4",
-    "jest": "^27.5.1",
-    "jest-extended": "^2.0.0",
-    "jest-sorted": "^1.0.14",
-    "pg-format": "^1.0.4",
-    "supertest": "^6.2.4"
-  },
-  "dependencies": {
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "pg": "^8.7.3"
-  },</code>
+To inspect this project (or build your own!) locally start by forking and cloning this repository.
 
-### SETUP DATABASE 📂
+### Prerequisites
 
-<p>You will need to make sure you connect the two databases; development and test.
-To do this you will need to create individual .env files using the .env-example as a template.<br>
+At a minimum your machine will need Node.js and Postgres installed.
 
-You will require a **.env.test** and a **.env.development** file to be able to connect to the appropriate database.
-⚠️ Contact the owner for the database names</p>
+## Installation
 
-Once the **.env files** You will need to install [dotenv](https://www.npmjs.com/package/dotenv)
+You can install the neccesary dependencies with the following command:
 
-<p>Finally, you will need to seed the databases, otherwise the app will not find any data. To do this first run the command
+```
+npm install
+```
 
-`npm run setup-dbs `
+This will install following dependencies from package.json:
+- CORS
+- Dotenv
+- Express
+- PG
 
-this will setup the database to seed it run: </p>
+To install optional dev dependencies for testing run the following command
 
-`npm run seed `
+```
+npm install -D
+```
 
-and finally to allow the server to listen for requests use:
+This will install following dependencies to the project:
+- Husky 
+- Jest
+- Jest-extended
+- Jest-sorted
+- PG-format
+- Supertest
 
-`npm run start `
+## Seed Database
 
-The server will now be able to respond to request. A program like insomnia will allow you to send requests and view the responses from the api.
+There are premade scripts defined in package.json for seeding the database. You can run this with the following two commands:
 
----
+```
+npm run setup-dbs
+npm run seed
+```
+## Setup .env Files
+
+Along with the node_modules the .env files have also been ignored in this repo. You will need to set these up yourself. To do this:
+
+ 1. Create `.env.development` and `.env.test` in the projects root folder.
+ 2. Add `PGDATABASE=nc_news` to connect to the main development database. 
+ 3. Add `PGDATABASE=nc_news_test` to connect to the test database
+ 4. Add the `.env.*` to .gitignore
+
+## Testing
+
+To test the endpoints are working correctly, run the following command;
+
+```
+npm test
+```
+
+This will run all tests in the `app.test.js` file. 
